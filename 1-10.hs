@@ -73,5 +73,38 @@ largest_prime_factor n (x:xs) largest = if (n `mod` (toInteger x)) == 0 then lar
 foo = 600851475143
 ans3 = largest_prime_factor foo (primes_up_to 7000) 0
 
+{- 
+Problem 4
+=========
+
+Find the largest palindrome made from the product of two 3-digit numbers.
+-}
+
+-- first, lets consider the biggest possible product of two three digit numbers.
+-- biggestProduct = 999 * 999
+
+
+-- we can write these products x*y as tuples (x,y)
+productTuples = reverse [ (x,y) | x <- [1..999], y <- [1..999]]
+
+
+-- number palindrome
+isPalindromic n = isPalindrome (show n)
+
+-- string palindrome 
+isPalindrome :: String -> Bool
+isPalindrome s = if (length s < 2 || head s == last s) 
+						then (length s <= 2 || isPalindrome (tail (init s)))
+						else False
+
+-- find the biggest number in a list
+maxInt :: [Int] -> Int -> Int
+maxInt [] y = y
+maxInt (x:xs) y = if x > y then maxInt xs x else maxInt xs y
+
+--Find the biggest palindrome
+biggestPalindrome :: Int
+biggestPalindrome = maxInt [ (x*y) | (x,y) <- productTuples, isPalindromic (x*y)] 0
+
 
 
