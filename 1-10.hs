@@ -1,3 +1,5 @@
+import Data.List
+
 -- The answers for the first few exercises --
 
 {-
@@ -106,5 +108,48 @@ maxInt (x:xs) y = if x > y then maxInt xs x else maxInt xs y
 biggestPalindrome :: Int
 biggestPalindrome = maxInt [ (x*y) | (x,y) <- productTuples, isPalindromic (x*y)] 0
 
+{- Problem 5
+============ -}
 
+goal = [2.20]
+--note that if a number is divisible by 20, it is also divisible by 10, 5, 2.
+--this gives us a smaller list:
+new_goal = [11,12,13,14,15,16,17,18,19,20]
+
+
+{-
+these are apparently expensive functions. 
+I didn't know there's already a faster implementation in Haskell.
+To make the list of all numbers divisible by n, it's better to take [n,2n,..]
+
+step_with with = iterate (+with) with
+
+step_with_to with to = step_with_to' with to [with]
+    where step_with_to' with to xs
+           | last xs + with > to = xs
+           | otherwise = step_with_to' with to (xs ++ [last xs + with])
+
+step_from_with_to from with to = step_from_with_to' from with to [from]
+    where step_from_with_to' from with to xs
+           | (last xs + with) <= to = step_from_with_to' from with to (xs ++ [last xs + with])
+           | otherwise = xs
+
+mults_from_div_to from div to
+	| (from `mod` div == 0) 	= mults_from_div_to' from div to [from] 
+	| otherwise 				= mults_from_div_to' from div to [from + (div - (from `mod` div))]
+	where
+		mults_from_div_to' from div to xs
+			| last xs + div > to		= xs
+			| otherwise					= mults_from_div_to' from div to (xs ++ [last xs + div])
+-}
+            
+--intersection is also a costly operations. Let's not use it.
+
+searchlist = [20,40..999999999]
+
+filter_it [] fs = []
+filter_it xs [] = xs
+filter_it xs (f:fs) = filter_it [x | x <- xs, x `mod` f == 0] fs
+
+filter_it searchlist new_goal
 
