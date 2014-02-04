@@ -154,6 +154,22 @@ filter_it xs (f:fs) = filter_it [x | x <- xs, x `mod` f == 0] fs
 ans5 = filter_it searchlist new_goal
 
 {-
+Problem 6
+=========
+-}
+
+--implement first, optimize later.
+--naive solution, works fast enough
+--note that because of the size of the numbers, we can't use the (**) operation
+
+sum_of_squares :: Integer -> Integer
+sum_of_squares n = sum [x * x | x <- [1..n]]
+
+square_of_sum :: Integer -> Integer
+square_of_sum n = (sum [1..n]) * (sum [1..n])
+ans6 = (square_of_sum 100) - sum_of_squares 100
+
+{-
 Problem 7
 ==========
 -}
@@ -174,6 +190,32 @@ psieve2 i nats prime
 	| otherwise					= psieve2 (i-1) new_nats (head new_nats)
 		where new_nats = [x | x <- nats, x `mod` prime /= 0]
 
---solution (slow)
+--solution (slowish)
 --I knew where to look because of the prime counting function
 ans7 = psieve2 10001 [2..105000] 2
+
+{- problem 8
+============
+-}
+
+bigseqint = 7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450
+bigseqstr = map (\x -> read [x] :: Int) (show bigseqint)
+bigseq = show bigseqint
+
+subseq_len n xs
+	| n > length xs	= []
+	| otherwise		= [take n xs] ++ (subseq_len n (tail xs))
+
+five_seqs = subseq_len 5 bigseqstr
+
+--filter out all duplicates
+removeDups :: Ord a => [a] -> [a]
+removeDups = foldl (\seen x -> if x `elem` seen then seen else seen ++ [x]) []
+
+--filter out all products with 0
+--removeZeroes :: [[Int]] -> [[Int]]
+--removeZeroes xs = [x | x <- xs, notElem x 0] why does this not work?
+five_seqs_filtered = [x | x <- five_seqs, product x > 0]
+ans8 = maximum [product x | x <- five_seqs_filtered]
+
+
