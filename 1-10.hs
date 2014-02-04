@@ -151,5 +151,29 @@ filter_it [] fs = []
 filter_it xs [] = xs
 filter_it xs (f:fs) = filter_it [x | x <- xs, x `mod` f == 0] fs
 
-filter_it searchlist new_goal
+ans5 = filter_it searchlist new_goal
 
+{-
+Problem 6
+==========
+-}
+
+-- a better (real) sieve than the one used before
+--returns a list of the first i primes
+psieve i nats primes
+    | null nats					= []
+    | null primes               = psieve i nats [2]
+	| length primes < i 		= psieve i new_nats (primes ++ [head new_nats])
+	| otherwise					= primes
+		where new_nats = [x | x <- nats, x `mod` last primes /= 0]
+
+--returns the ith prime
+psieve2 i nats prime
+    | null nats					= -1
+	| i <= 1			 		= prime 
+	| otherwise					= psieve2 (i-1) new_nats (head new_nats)
+		where new_nats = [x | x <- nats, x `mod` prime /= 0]
+
+--solution (slow)
+--I knew where to look because of the prime counting function
+ans6 = psieve2 10001 [2..105000] 2
