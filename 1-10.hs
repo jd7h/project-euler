@@ -154,7 +154,7 @@ filter_it xs (f:fs) = filter_it [x | x <- xs, x `mod` f == 0] fs
 ans5 = filter_it searchlist new_goal
 
 {-
-Problem 6
+Problem 7
 ==========
 -}
 
@@ -176,4 +176,4 @@ psieve2 i nats prime
 
 --solution (slow)
 --I knew where to look because of the prime counting function
-ans6 = psieve2 10001 [2..105000] 2
+ans7 = psieve2 10001 [2..105000] 2
