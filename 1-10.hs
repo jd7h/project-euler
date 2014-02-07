@@ -218,4 +218,58 @@ removeDups = foldl (\seen x -> if x `elem` seen then seen else seen ++ [x]) []
 five_seqs_filtered = [x | x <- five_seqs, product x > 0]
 ans8 = maximum [product x | x <- five_seqs_filtered]
 
+{- Problem 9
+============
+
+This was really easy to solve, since I'm reading Learn You A Haskell at the moment
+and the problem was used as an example for list comprehensions.
+-}
+
+ans9 = product (head ([[x,y,z]| z <- [1..], y <- [1..z], x <- [1..y], (x*x)+(y*y)==z*z, x+y+z==1000]))
+
+{- Problem 10
+=============
+By now, two friends have joined me in Project Euler. From them I learned an even better
+way to compute primes.
+-}
+
+{-
+OLD FUNCTIONS
+--substracts list l2 from list l1
+minus :: Ord a => [a] -> [a] -> [a]
+minus l1 [] = l1
+minus [] l2 = []
+minus (x:xs) (y:ys)
+	| x > y	= minus (x:xs) ys
+	| x < y = x : minus xs (y:ys)
+	| otherwise = minus xs ys
+
+{-
+fast_prime_up_to n = fast_prime_sieve n [2..n] []
+fast_prime_sieve n [] primes = primes
+fast_prime_sieve n xs primes = fast_prime_sieve n (minus xs [(head xs)^2,(head xs)^2+(head xs)..n]) ((head xs) : primes)
+-}
+
+fast_prime_up_to n = fast_prime_sieve [2..n] []
+fast_prime_sieve [] primes	= primes
+fast_prime_sieve xs primes	= fast_prime_sieve (minus xs [head xs,((head xs) * 2)..100]) (head xs : primes)
+-}
+
+isPrime :: Int -> Bool
+isPrime n
+	| n <= 1				= False
+	| n < 4					= True
+	| n `mod` 2 == 0		= False
+	| n < 9					= True
+	| n `mod` 3 == 0		= False
+	| otherwise				= checkDiv n 5 (floor (sqrt (fromIntegral n)))
+
+checkDiv :: Int -> Int -> Int -> Bool
+checkDiv n f r 
+	| f <= r				= if (n `mod` f == 0 || n `mod` (f+2) == 0) then False else checkDiv n (f+6) r 
+	| otherwise				= True
+
+--Since the sum of all primes lower than 2000000 as an int will lead to overflow, we use the toInteger function:
+
+ans10 = sum (map toInteger (filter isPrime [1..2000000]))
 
