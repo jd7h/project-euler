@@ -47,3 +47,19 @@ tuples :: [[Int]] -> [[Int]]
 tuples = \m -> horiz_tuples m ++ vert_tuples m ++ diag_tuples_rl m ++ diag_tuples_lr m
 
 ans11 = maximum (map product (tuples cmatrix))
+
+{-
+Problem 12
+==========
+
+triangle_number n
+	| n < 0			= 0
+	| otherwise		= (triangle_number n-1) + n
+
+
+--[1,1+2,1+2+3,..]
+triangle_numbers :: Int -> Int -> [Int]
+triangle_numbers _ [] = triangle_numbers 1 [1]
+--triangle_numbers xs = triangle_numbers (xs ++ [(last xs) + (length xs) + 1])
+triangle_numbers n xs = triangle_numbers (n+1) (head xs + n) : xs
+-}
